@@ -25,5 +25,33 @@ var index = fs.readFileSync('./Vue/index.html', 'utf8');
 app.get("/", function(request, response){
   var html = ejs.render(index, {variableServeur: "toto"});
   response.writeHead(200, {'Content-Type': 'text/html'});
-  response.end(html);
+  response.write(html);
+  response.write("<br/><h4>hTEST BASE DE DONNEES</h4>");
+  var mysqlClient = mysql.createConnection({
+				host:"vclons.fr",
+				user:"admin_madera",
+				password:"UlVnzxb8ut",
+				database:"admin_bdd-madera"
+			});
+
+			var requete = "SELECT * FROM test";
+
+			mysqlClient.query(requete, function(error, results, fields){
+				if(error){
+					console.log(error);
+					mysqlClient.end();
+				}
+        response.write('<table><tr><th>id</th><th>Nom</th><th>Age</th></tr>');
+				for(var i = 0; i<results.length; i++){
+						var result = results[i];
+						response.write(
+							"<tr><td>num. " + result['id'] + "</td>"+
+							"<td>" + result['nom'] + "</td>"+
+							"<td>" + result['age'] + "</td></tr>"
+						);
+				}
+			  response.write('</table>');
+        response.end();
+			});
+
 });
