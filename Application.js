@@ -11,7 +11,6 @@ var CronJob = require('cron').CronJob;			//module de planification de tâches
 var path = require('path')
 var ejs = require('ejs');
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
 
 server.listen(8080);
 
